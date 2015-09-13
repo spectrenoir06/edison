@@ -9,21 +9,20 @@ import mraa
 LOW_TRES = 25
 HIGH_TRES = 35
 
-temperature
-degrees
+temperature, degrees = 0, 0
 
 def initTemp():
     global temperature
     temperature = mraa.Aio(0)
+    print("Temp Init")
 
 
-def tempProc(message):
+def alertTemp(message, buffer):
     global temperature
     global Alert
     global degrees
-    global buffer
     degrees = temperature.read()
-    buffer += str(degrees)+"; "
+    buffer.append(str(degrees)+", ")
     if degrees < LOW_TRES:
         message.append(Alert.TEMP_LOW)
         return True
