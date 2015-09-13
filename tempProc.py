@@ -22,7 +22,7 @@ def alertTemp(message, buffer):
     global Alert
     global degrees
     degrees = temperature.read()
-    buffer.append(str(degrees)+", ")
+    buffer.append(str(degrees)+",")
     if degrees < LOW_TRES:
         message.append(Alert.TEMP_LOW)
         return True
@@ -32,8 +32,4 @@ def alertTemp(message, buffer):
     else:
         return False
 
-
-def bufferiseTemp():
-    global degrees
-    return str(degrees) + "; "
 
