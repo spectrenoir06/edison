@@ -8,7 +8,7 @@ import pyupm_mma7660 as upmMMA7660
 
 ACTIVITY_TRES = 50
 
-myDigitalAccelerometer, x, y, z
+myDigitalAccelerometer, x, y, z = None, None, None, None
 
 
 def initAcc():
@@ -21,15 +21,17 @@ def initAcc():
     x = upmMMA7660.new_intp()
     y = upmMMA7660.new_intp()
     z = upmMMA7660.new_intp()
+    print("Acc init")
 
 
-def accProc(message):
-    global buffer
+def alertAcc(message, buffer):
     global Alert
     myDigitalAccelerometer.getRawValues(x, y, z)
-    buffer += "x=" + str(upmMMA7660.intp_value(x)) + ", y=" + str(upmMMA7660.intp_value(y)) + ", z=" + \
-              str(upmMMA7660.intp_value(z))
-    if (x*x + y*y + z*z) < ACTIVITY_TRES:
+    valx = upmMMA7660.intp_value(x)
+    valy = upmMMA7660.intp_value(y)
+    valz = upmMMA7660.intp_value(z)
+    buffer.append(str(valx) + ", " + str(valy) + ", " + str(valz))
+    if (valx*valx + valy*valy + valz*valz) < ACTIVITY_TRES:
         return False
     else:
         message.append(Alert.ACTIVE)
