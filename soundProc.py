@@ -5,7 +5,7 @@ from time import sleep
 import mraa
 from globals import *
 import pyupm_mic as upmMicrophone
-mymic, threshContext
+mymic, threshContext = None, None
 VOLUME_THRES = 10
 
 
@@ -13,20 +13,21 @@ def initSound():
     global mymic
     global threshContext
     mymic = upmMicrophone.Microphone(1)
-    threshcontext = upmMicrophone.thresholdContext()
-    threshcontext.averageReading = 0
-    threshcontext.runningAverage = 0
-    threshcontext.averagedOver = 2
+    threshContext = upmMicrophone.thresholdContext()
+    threshContext.averageReading = 0
+    threshContext.runningAverage = 0
+    threshContext.averagedOver = 2
+    print("Sound init")
 
 
-def soundProc(message):
-    global buffer
+def alertSound(message, buffer):
     global Alert
+    global mymic
     buf = upmMicrophone.uint16Array(32)
     len = mymic.getSampledWindow(2, 32, buf)
     if len:
         thresh = mymic.findThreshold(threshContext, 30, buf, len)
-    buffer += str(thresh) + ", "
+    buffer.append(str(thresh) + ", ")
     if thresh > VOLUME_THRES:
         message.append(Alert.BARKING)
         return True
