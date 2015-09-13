@@ -11,10 +11,9 @@ import mraa
 import pyupm_mic as upmMicrophone
 import pyupm_mma7660 as upmMMA7660
 
+
 # Init accelerometer
 initAcc()
-# Init messages list
-message = []
 
 while (1):
     global message
@@ -25,18 +24,17 @@ while (1):
     initTemp()
     initSound()
     initAcc()
-    print("test")
+    sleep(1)
+    print("all inits done")
 
     i = 0
 
     while (1):
-        buffer = ""
-        alert = alertTemp(message) + alertSound(message) + alertProc(message)
-        buffer += "\n"
-
-
-
-        s.send(buffer)
-        s.send( )
+        buffer = []
+        message = []
+        alert = alertTemp(message, buffer) + alertSound(message, buffer) + alertAcc(message, buffer)
+        buffer_str = buffer[0] + buffer[1] + buffer[2] + "\n"
+        print(buffer_str)
+        s.send(buffer_str)
         sleep(i)
     s.close()
