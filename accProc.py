@@ -30,7 +30,7 @@ def alertAcc(message, buffer):
     valx = upmMMA7660.intp_value(x)
     valy = upmMMA7660.intp_value(y)
     valz = upmMMA7660.intp_value(z)
-    buffer.append(str(valx) + ", " + str(valy) + ", " + str(valz))
+    buffer.append(str(valx) + "," + str(valy) + "," + str(valz))
     if (valx*valx + valy*valy + valz*valz) < ACTIVITY_TRES:
         return False
     else:
