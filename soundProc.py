@@ -1,12 +1,14 @@
 import socket
 import os
 import sys
-from time import sleep
+from time import *
 import mraa
 from globals import *
 import pyupm_mic as upmMicrophone
 mymic, threshContext = None, None
 VOLUME_THRES = 10
+reset = True
+t
 
 
 def initSound():
@@ -23,13 +25,22 @@ def initSound():
 def alertSound(message, buffer):
     global Alert
     global mymic
+    global t
+    global reset
     buf = upmMicrophone.uint16Array(32)
     len = mymic.getSampledWindow(2, 32, buf)
     if len:
         thresh = mymic.findThreshold(threshContext, 30, buf, len)
-    buffer.append(str(thresh) + ", ")
+    buffer.append(str(thresh) + ",")
     if thresh > VOLUME_THRES:
-        message.append(Alert.BARKING)
+        if reset:
+            t = time.time()
+            reset = False
+        else:
+            dt = time.time() - t
+            if( dt > 10 ) :
+                message.append(Alert.BARKING)
+                reset = True
         return True
     else:
         return False
